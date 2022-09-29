@@ -1,0 +1,44 @@
+Source: fontparts
+Section: devel
+Priority: optional
+Maintainer: Debian Fonts Task Force <debian-fonts@lists.debian.org>
+Uploaders: Yao Wei (魏銘廷) <mwei@debian.org>
+Build-Depends:
+ debhelper-compat (= 12),
+ dh-python,
+ python3-all,
+ python3-setuptools,
+ python3-fonttools (>= 4.14.0),
+ python3-fontmath (>= 0.6.0),
+ python3-defcon (>= 0.6.0),
+ python3-booleanoperations (>= 0.9.0),
+ python3-fontpens,
+ python3-coverage,
+ python3-sphinx,
+Standards-Version: 4.5.0
+Homepage: https://github.com/robotools/fontParts
+Vcs-Browser: https://salsa.debian.org/fonts-team/fontparts
+Vcs-Git: https://salsa.debian.org/fonts-team/fontparts.git
+
+Package: python3-fontparts
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends},
+ python3-booleanoperations (>= 0.9.0),
+Suggests: python-fontparts-doc
+Description: API for interacting with the parts of fonts
+ FontParts is a Python API for programmatically creating and editing parts of
+ fonts during the type design process, and it is application-independent to
+ allow scripts to be portable across multiple applications.
+ .
+ This package installs the library for Python 3.
+
+Package: python-fontparts-doc
+Architecture: all
+Section: doc
+Depends: ${sphinxdoc:Depends}, ${misc:Depends}
+Description: API for interacting with the parts of fonts (common documentation)
+ FontParts is a Python API for programmatically creating and editing parts of
+ fonts during the type design process, and it is application-independent to
+ allow scripts to be portable across multiple applications.
+ .
+ This is the common documentation package.

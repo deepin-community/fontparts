@@ -1,0 +1,2 @@
+# False positive: line is already that long in readable format.
+fontparts source: source-is-missing documentation/source/_themes/fontPartsTheme/static/js/readthedocs.js line length is 312 characters (>256)
