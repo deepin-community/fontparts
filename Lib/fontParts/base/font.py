@@ -86,6 +86,8 @@ class BaseFont(
         Refer to :meth:`BaseFont.copy` for a list
         of values that will be copied.
         """
+        # set the default layer name
+        self.defaultLayer.name = source.defaultLayerName
         for layerName in source.layerOrder:
             if layerName in self.layerOrder:
                 layer = self.getLayer(layerName)
@@ -586,6 +588,30 @@ class BaseFont(
         instance of a :class:`BaseLib` subclass.
 
         Subclasses must override this method.
+        """
+        self.raiseNotImplementedError()
+
+    # tempLib
+
+    tempLib = dynamicProperty(
+        "base_tempLib",
+        """
+        The font's :class:`BaseLib` object. ::
+
+            >>> font.tempLib["org.robofab.hello"]
+            "world"
+        """
+    )
+
+    def _get_base_tempLib(self):
+        lib = self._get_tempLib()
+        lib.font = self
+        return lib
+
+    def _get_tempLib(self):
+        """
+        This is the environment implementation of :attr:`BaseLayer.tempLib`.
+        This must return an instance of a :class:`BaseLib` subclass.
         """
         self.raiseNotImplementedError()
 
@@ -1509,9 +1535,13 @@ class BaseFont(
 
     def getReverseComponentMapping(self):
         """
-        Create a dictionary of unicode -> [glyphname, ...] mappings.
-        All glyphs are loaded. Note that one glyph can have multiple unicode values,
-        and a unicode value can have multiple glyphs pointing to it.
+        Get a reversed map of component references in the font.
+        {
+        'A' : ['Aacute', 'Aring']
+        'acute' : ['Aacute']
+        'ring' : ['Aring']
+        etc.
+        }
         """
         return self._getReverseComponentMapping()
 
@@ -1527,13 +1557,9 @@ class BaseFont(
 
     def getCharacterMapping(self):
         """
-        Get a reversed map of component references in the font.
-        {
-        'A' : ['Aacute', 'Aring']
-        'acute' : ['Aacute']
-        'ring' : ['Aring']
-        etc.
-        }
+        Create a dictionary of unicode -> [glyphname, ...] mappings.
+        All glyphs are loaded. Note that one glyph can have multiple unicode values,
+        and a unicode value can have multiple glyphs pointing to it.
         """
         return self._getCharacterMapping()
 

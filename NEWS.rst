@@ -1,8 +1,61 @@
-0.9.5 (released 2020-09-06)
+0.10.6 (released 2022-06-21)
+---------------------------
+- Adds `openFonts` (more than one font). Issue #545. (thanks @typesupply!)
+
+0.10.5 (released 2022-05-10)
+---------------------------
+- Adds `glyph.autoContourOrder`. Issue #645. (thanks @roberto-arista!)
+- Adds `FuzzyNumber` to `base.py`. Needed for the above, copied from defcon. (thanks @typemytype!)
+
+0.10.4 (released 2022-03-17)
+---------------------------
+- Fixes issue with setting glyph name when copying. Issue #633. (thanks @typemytype!)
+
+0.10.3 (released 2022-02-24)
+---------------------------
+- Fixes issue with `defaultLayer` and copying a `font`. Issue #630. (thanks @typemytype!)
+
+0.10.2 (released 2022-01-05)
+---------------------------
+- Add vaidate kwarg to _loadFromGlyph #623. (thanks @ctrlcctrlv)
+
+0.10.1 (released 2021-12-28)
+---------------------------
+- Update to use Collections.abc.Hashable by @benkiel in #622
+- Start testing Python 3.10 by @benkiel in #619
+
+0.10.0 (released 2021-12-28)
+---------------------------
+- 2021-12-28: Drops support for Python 3.6
+- 2021-12-14: Adds tempLib, #615 (thanks @typemytype!)
+- Improved docs with #605 and #607. Thanks @driehuis and @arrowtype!
+
+0.9.11 (released 2021-08-06)
+---------------------------
+- 2021-08-06: Fixes inserting a segment with an open contour, #601 (thanks @typemytype!)
+
+0.9.10 (released 2021-03-09)
+---------------------------
+- 2021-03-09: Update to Defcon 0.8.0 (thanks @justvanrossum!)
+
+0.9.9 (released 2021-02-13)
+---------------------------
+- 2021-02-13: Fixed import of version. (#573, thanks @gyscos!) 
+
+0.9.8 (released 2021-02-12)
+---------------------------
+- 2021-02-11: Add support for quadratic curves with no on-curve points in Contour and Segment. (#572, thanks @typemytype!) 
+
+0.9.7 (released 2020-12-23)
+---------------------------
+- 2020-12-23: Change to github actions for CI and release. 
+- 2020-12-18: fontShell returns `None` when referenced file name doesn't exist for an `Image` (#567, thanks @typemytype)
+
+0.9.6 (released 2020-09-06)
 ---------------------------
 - 2020-09-06: fontShell has `changed()` implemented now 
 
-0.9.4 (released 2020-09-04)
+0.9.5 (released 2020-09-04)
 ---------------------------
 - 2020-09-04: Fix for contours not getting updated in fontShell, thanks @justvanrossum!
 - 2020-09-03: Fix for error message in normalizeKerningKey, thanks @colinmford!

@@ -12,7 +12,8 @@ from fontParts.base.base import (
     InterpolationMixin,
     SelectionMixin,
     dynamicProperty,
-    interpolate
+    interpolate,
+    FuzzyNumber
 )
 from fontParts.base import normalizers
 from fontParts.base.compatibility import GlyphCompatibilityReporter
@@ -1511,13 +1512,48 @@ class BaseGlyph(BaseObject,
 
     def _autoContourOrder(self, **kwargs):
         """
-        XXX
-
-        This can be ported from RoboFab.
-
-        XXX
+        Sorting is based on (in this order):
+        - the (negative) point count
+        - the (negative) segment count
+        - x value of the center of the contour rounded to a threshold
+        - y value of the center of the contour rounded to a threshold
+          (such threshold is calculated as the smallest contour width
+          or height in the glyph divided by two)
+        - the (negative) surface of the bounding box of the contour: width * height
+        the latter is a safety net for for instances like a very thin 'O' where the
+        x centers could be close enough to rely on the y for the sort which could
+        very well be the same for both contours. We use the _negative_ of the surface
+        to ensure that larger contours appear first, which seems more natural.
         """
-        self.raiseNotImplementedError()
+        tempContourList = []
+        contourList = []
+        xThreshold = None
+        yThreshold = None
+
+        for contour in self:
+            bounds = contour.bounds
+            if bounds is None:
+                continue
+            xMin, yMin, xMax, yMax = bounds
+            width = xMax - xMin
+            height = yMax - yMin
+            xC = 0.5 * (xMin + xMax)
+            yC = 0.5 * (yMin + yMax)
+            xTh = abs(width * 0.5)
+            yTh = abs(height * 0.5)
+            if xThreshold is None or xThreshold > xTh:
+                xThreshold = xTh
+            if yThreshold is None or yThreshold > yTh:
+                yThreshold = yTh
+            tempContourList.append((-len(contour.points), -len(contour.segments), xC, yC, -(width * height), contour))
+
+        for points, segments, x, y, surface, contour in tempContourList:
+            contourList.append((points, segments, FuzzyNumber(x, xThreshold), FuzzyNumber(y, yThreshold), surface, contour))
+        contourList.sort()
+
+        self.clearContours()
+        for points, segments, xO, yO, surface, contour in contourList:
+            self.appendContour(contour)
 
     # --------------
     # Transformation
@@ -1766,7 +1802,7 @@ class BaseGlyph(BaseObject,
         from fontMath.mathFunctions import setRoundIntegerFunction
 
         setRoundIntegerFunction(normalizers.normalizeVisualRounding)
-        
+
         minGlyph = minGlyph._toMathGlyph()
         maxGlyph = maxGlyph._toMathGlyph()
         try:
@@ -2327,6 +2363,30 @@ class BaseGlyph(BaseObject,
         return lib
 
     def _get_lib(self):
+        """
+        Subclasses must override this method.
+        """
+        self.raiseNotImplementedError()
+
+    # --------
+    # Temp Lib
+    # --------
+
+    tempLib = dynamicProperty(
+        "base_tempLib",
+        """
+        The :class:`BaseLib` for the glyph.
+
+            >>> tempLib = glyph.tempLib
+        """
+    )
+
+    def _get_base_tempLib(self):
+        lib = self._get_tempLib()
+        lib.glyph = self
+        return lib
+
+    def _get_tempLib(self):
         """
         Subclasses must override this method.
         """
