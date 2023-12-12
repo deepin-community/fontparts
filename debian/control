@@ -8,14 +8,15 @@ Build-Depends:
  dh-python,
  python3-all,
  python3-setuptools,
- python3-fonttools (>= 4.14.0),
- python3-fontmath (>= 0.6.0),
- python3-defcon (>= 0.6.0),
+ python3-setuptools-scm,
+ python3-fonttools (>= 4.33.3),
+ python3-fontmath (>= 0.9.1),
+ python3-defcon (>= 0.10.1),
  python3-booleanoperations (>= 0.9.0),
  python3-fontpens,
  python3-coverage,
  python3-sphinx,
-Standards-Version: 4.5.0
+Standards-Version: 4.6.1
 Homepage: https://github.com/robotools/fontParts
 Vcs-Browser: https://salsa.debian.org/fonts-team/fontparts
 Vcs-Git: https://salsa.debian.org/fonts-team/fontparts.git
